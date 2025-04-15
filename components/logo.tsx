@@ -14,7 +14,7 @@ export default function Logo() {
     // Create a more elaborate fireworks effect
     const duration = 5 * 1000
     const animationEnd = Date.now() + duration
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 }
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 } // Increased zIndex
 
     function randomInRange(min: number, max: number) {
       return Math.random() * (max - min) + min

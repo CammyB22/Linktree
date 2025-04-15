@@ -85,11 +85,12 @@ export default function Footer() {
 
     setShowEasterEgg(true)
 
-    // Regular confetti
+    // Regular confetti with higher z-index
     confetti({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.9 },
+      zIndex: 9999, // Increased zIndex
     })
 
     // Hide easter egg message after 3 seconds
@@ -178,7 +179,7 @@ export default function Footer() {
       // Launch from random positions
       const randomPosition = positions[Math.floor(Math.random() * positions.length)]
 
-      // Fireworks effect
+      // Fireworks effect with higher z-index
       confetti({
         particleCount: 150,
         spread: 360,
@@ -189,6 +190,7 @@ export default function Footer() {
         colors: ["#FF9933", "#FF5733", "#4169E1", "#33A1DE", "#33DE8A", "#FF33A8", "#D433FF", "#FFDE33"],
         shapes: ["circle", "square"],
         scalar: 1.2,
+        zIndex: 9999, // Increased zIndex
       })
 
       // Add some streamers
@@ -206,6 +208,7 @@ export default function Footer() {
           gravity: 0.6,
           scalar: 2,
           drift: 0,
+          zIndex: 9999, // Increased zIndex
         })
       }
     }, 200)
@@ -214,7 +217,7 @@ export default function Footer() {
   const triggerUltraEasterEgg = () => {
     setShowUltraEasterEgg(true)
 
-    // Play a special confetti effect
+    // Play a special confetti effect with higher z-index
     confetti({
       particleCount: 200,
       spread: 160,
@@ -222,6 +225,7 @@ export default function Footer() {
       colors: ["#FFFFFF", "#F5F5F5", "#EFEFEF", "#E0E0E0"],
       ticks: 300,
       gravity: 0.6,
+      zIndex: 9999, // Increased zIndex
     })
 
     // Hide the ultra easter egg after 2 seconds
@@ -313,14 +317,15 @@ export default function Footer() {
       <AnimatePresence>
         {showUltraEasterEgg && (
           <motion.div
-            className="fixed bottom-0 left-0 w-full z-50 pointer-events-none"
+            className="fixed bottom-0 left-0 w-full z-[9000] pointer-events-none"
             initial={{ y: "100%" }}
             animate={{ y: "0%" }}
             exit={{ y: "100%" }}
             transition={{
               type: "spring",
-              stiffness: 100,
-              damping: 15,
+              stiffness: 65,
+              damping: 20,
+              mass: 1.2,
             }}
           >
             <div className="container mx-auto px-4">
@@ -340,7 +345,7 @@ export default function Footer() {
                   className="absolute top-0 right-[-80px] transform -translate-y-12 bg-white rounded-xl px-4 py-2 shadow-lg"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 15 }}
+                  transition={{ delay: 0.5, type: "spring", stiffness: 300, damping: 15 }}
                 >
                   <div className="relative">
                     <p className="font-bold text-gray-800">You found me!</p>
