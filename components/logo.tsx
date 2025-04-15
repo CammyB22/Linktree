@@ -50,7 +50,7 @@ export default function Logo() {
   return (
     <div className="relative">
       <motion.div
-        className="flex justify-center mb-6 cursor-pointer mx-auto max-w-xs"
+        className="flex justify-center mb-6 cursor-pointer mx-auto max-w-sm"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -59,10 +59,10 @@ export default function Logo() {
         <Image
           src="/images/logo.png"
           alt="CampusKey Student Living"
-          width={180}
-          height={72}
+          width={185}
+          height={74}
           priority
-          className="h-auto"
+          className="h-auto w-full"
         />
       </motion.div>
 

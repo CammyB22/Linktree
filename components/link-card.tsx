@@ -80,17 +80,17 @@ export default function LinkCard({ link, index }: LinkCardProps) {
     },
   }
 
-  // Get glow color based on mood
-  const getGlowColor = () => {
+  // Enhanced shadow for hover state
+  const getHoverShadow = () => {
     switch (mood) {
       case "chill":
-        return "0 0 15px rgba(147, 197, 253, 0.5)"
+        return "0 10px 25px rgba(147, 197, 253, 0.4)"
       case "hustle":
-        return "0 0 15px rgba(253, 186, 116, 0.5)"
+        return "0 10px 25px rgba(253, 186, 116, 0.4)"
       case "study":
-        return "0 0 15px rgba(110, 231, 183, 0.5)"
+        return "0 10px 25px rgba(110, 231, 183, 0.4)"
       default:
-        return "0 0 15px rgba(147, 197, 253, 0.5)"
+        return "0 10px 25px rgba(147, 197, 253, 0.4)"
     }
   }
 
@@ -100,13 +100,11 @@ export default function LinkCard({ link, index }: LinkCardProps) {
       <motion.div className="block" variants={item}>
         <motion.div
           ref={cardRef}
-          className="relative bg-white/40 backdrop-blur-md rounded-xl overflow-hidden shadow-lg border border-white/40"
+          className="relative bg-white/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/40 shadow-lg"
           style={{
             rotateX,
             rotateY,
-            transformStyle: "preserve-3d",
-            boxShadow: isHovered ? getGlowColor() : "none",
-            transition: "box-shadow 0.3s ease",
+            boxShadow: isHovered ? getHoverShadow() : "0 8px 15px rgba(0, 0, 0, 0.1)",
           }}
           whileHover={{
             scale: 1.03,
@@ -140,18 +138,17 @@ export default function LinkCard({ link, index }: LinkCardProps) {
           </motion.div>
 
           <div className="p-5">
-            <motion.div className="flex items-center relative z-10" style={{ transform: "translateZ(20px)" }}>
+            <motion.div className="flex items-center relative z-10">
               <motion.div
                 className="w-12 h-12 flex items-center justify-center text-2xl bg-white/50 backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border border-white/50"
                 whileHover="hover"
                 initial="initial"
                 animate={isHovered ? "hover" : "initial"}
                 variants={iconVariants}
-                style={{ transform: "translateZ(30px)" }}
               >
                 <span>{link.icon}</span>
               </motion.div>
-              <div style={{ transform: "translateZ(20px)" }}>
+              <div>
                 <h3 className="font-medium text-lg">{link.title}</h3>
                 <p className="text-sm text-gray-600">
                   {link.title === "Careers @ CK" ? "Join our team" : link.description}
@@ -179,13 +176,11 @@ export default function LinkCard({ link, index }: LinkCardProps) {
     >
       <motion.div
         ref={cardRef}
-        className="relative bg-white/20 backdrop-blur-md rounded-xl p-4 shadow-lg border border-white/40 hover:shadow-xl transition-all overflow-hidden"
+        className="relative bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
         style={{
           rotateX,
           rotateY,
-          transformStyle: "preserve-3d",
-          boxShadow: isHovered ? getGlowColor() : "none",
-          transition: "box-shadow 0.3s ease",
+          boxShadow: isHovered ? getHoverShadow() : "0 8px 15px rgba(0, 0, 0, 0.1)",
         }}
         whileHover={{
           scale: 1.03,
@@ -205,18 +200,17 @@ export default function LinkCard({ link, index }: LinkCardProps) {
           transition={{ duration: 1.5, ease: "easeInOut" }}
         />
 
-        <motion.div className="flex items-center relative z-10" style={{ transform: "translateZ(20px)" }}>
+        <motion.div className="flex items-center relative z-10">
           <motion.div
             className="w-12 h-12 flex items-center justify-center text-2xl bg-white/50 backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border border-white/50"
             whileHover="hover"
             initial="initial"
             animate={isHovered ? "hover" : "initial"}
             variants={iconVariants}
-            style={{ transform: "translateZ(30px)" }}
           >
             <span>{link.icon}</span>
           </motion.div>
-          <div style={{ transform: "translateZ(20px)" }}>
+          <div>
             <h3 className="font-medium text-lg">{link.title}</h3>
             <p className="text-sm text-gray-600">
               {link.title === "Careers @ CK" ? "Join our team" : link.description}
