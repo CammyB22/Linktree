@@ -334,7 +334,7 @@ export default function DynamicGreeting() {
         <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
 
         {/* Time indicator */}
-        <div className="absolute top-4 right-4 bg-white/30 backdrop-blur-md rounded-full px-3 py-1 text-sm font-medium flex items-center gap-1.5 border border-white/40">
+        <div className="absolute top-4 right-4 bg-white/30 backdrop-blur-md rounded-full px-3 py-1 text-sm font-medium flex items-center gap-1.5 border border-white/40 hidden md:flex">
           <span>{getTimeEmoji()}</span>
           <span className="capitalize">{timeBlock}</span>
         </div>
