@@ -364,7 +364,7 @@ export default function DynamicGreeting() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <p className="text-xl md:text-2xl text-gray-700 font-medium">{tagline}</p>
+            <p className="text-xl md:text-2xl text-gray-700 font-medium">CampusKey life, streamlined!</p>
           </motion.div>
 
           {/* Subtitle */}
