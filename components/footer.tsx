@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion"
 import confetti from "canvas-confetti"
 import { InstagramIcon } from "./icons/instagram-icon"
 import { TikTokIcon } from "./icons/tiktok-icon"
+import { FacebookIcon } from "./icons/facebook-icon"
+import { YoutubeIcon } from "./icons/youtube-icon"
+import { LinkedinIcon } from "./icons/linkedin-icon"
 import Image from "next/image"
 
 export default function Footer() {
@@ -361,7 +364,7 @@ export default function Footer() {
         )}
       </AnimatePresence>
 
-      <div className="flex justify-center space-x-6">
+      <div className="flex justify-center space-x-4 flex-wrap">
         <motion.a
           href="https://www.tiktok.com/@campuskey"
           target="_blank"
@@ -381,7 +384,7 @@ export default function Footer() {
               ease: "easeIn",
             },
           }}
-          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900"
+          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900 mb-2"
         >
           <TikTokIcon className="w-5 h-5" />
           <span className="sr-only">TikTok</span>
@@ -405,10 +408,82 @@ export default function Footer() {
               ease: "easeIn",
             },
           }}
-          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900"
+          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900 mb-2"
         >
           <InstagramIcon className="w-5 h-5" />
           <span className="sr-only">Instagram</span>
+        </motion.a>
+        <motion.a
+          href="https://www.youtube.com/@campuskeystudentliving9374"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{
+            scale: 1.2,
+            rotate: 5,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          }}
+          whileTap={{
+            scale: 0.9,
+            transition: {
+              duration: 0.1,
+              ease: "easeIn",
+            },
+          }}
+          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900 mb-2"
+        >
+          <YoutubeIcon className="w-5 h-5" />
+          <span className="sr-only">YouTube</span>
+        </motion.a>
+        <motion.a
+          href="https://www.linkedin.com/company/campuskey-student-living"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{
+            scale: 1.2,
+            rotate: -5,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          }}
+          whileTap={{
+            scale: 0.9,
+            transition: {
+              duration: 0.1,
+              ease: "easeIn",
+            },
+          }}
+          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900 mb-2"
+        >
+          <LinkedinIcon className="w-5 h-5" />
+          <span className="sr-only">LinkedIn</span>
+        </motion.a>
+        <motion.a
+          href="https://www.facebook.com/campuskey"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{
+            scale: 1.2,
+            rotate: 5,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          }}
+          whileTap={{
+            scale: 0.9,
+            transition: {
+              duration: 0.1,
+              ease: "easeIn",
+            },
+          }}
+          className="bg-white/30 backdrop-blur-md p-3 rounded-full shadow-md border border-white/40 text-gray-700 hover:text-gray-900 mb-2"
+        >
+          <FacebookIcon className="w-5 h-5" />
+          <span className="sr-only">Facebook</span>
         </motion.a>
       </div>
     </motion.footer>
