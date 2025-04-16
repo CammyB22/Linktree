@@ -126,7 +126,7 @@ export default function LeaderboardModal({ onClose }: LeaderboardModalProps) {
                 <div className="col-span-3">FOUND</div>
                 <div className="col-span-7">PLAYER</div>
               </div>
-              
+
               {/* Scrollable entries */}
               <div className="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
                 {leaderboard.map((entry, index) => {
@@ -151,7 +151,9 @@ export default function LeaderboardModal({ onClose }: LeaderboardModalProps) {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <div className="col-span-2 font-mono text-white flex items-center">{getMedal(displayPosition)}</div>
+                      <div className="col-span-2 font-mono text-white flex items-center">
+                        {getMedal(displayPosition)}
+                      </div>
                       <div className="col-span-3 font-mono text-green-400">
                         {displayPosition}
                         <sup>{getOrdinalSuffix(displayPosition)}</sup>
@@ -173,23 +175,23 @@ export default function LeaderboardModal({ onClose }: LeaderboardModalProps) {
 
         <div className="text-center text-xs text-gray-300 mt-4">Find the easter egg to add your initials!</div>
       </motion.div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(75, 85, 99, 0.2);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(139, 92, 246, 0.5);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(139, 92, 246, 0.7);
+        }
+      `}</style>
     </motion.div>
-  \
-  ;<style jsx global>{`
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: rgba(75, 85, 99, 0.2);
-        border-radius: 10px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: rgba(139, 92, 246, 0.5);
-        border-radius: 10px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: rgba(139, 92, 246, 0.7);
-      }
-    `}</style>
   )
 }
