@@ -27,6 +27,22 @@ export default function Footer() {
   // Fetch the current easter egg count on component mount
   useEffect(() => {
     fetchEasterEggCount()
+
+    // Listen for easter egg reset events from the admin page
+    const handleEasterEggReset = () => {
+      // Reset local state
+      setHasFoundEasterEgg(false)
+      setEasterEggCounter(0)
+
+      // Clear localStorage
+      localStorage.removeItem("hasFoundSuperEasterEgg")
+    }
+
+    window.addEventListener("easterEggReset", handleEasterEggReset as EventListener)
+
+    return () => {
+      window.removeEventListener("easterEggReset", handleEasterEggReset as EventListener)
+    }
   }, [])
 
   // Function to fetch the easter egg count

@@ -10,6 +10,7 @@ export default function AdminResetPage() {
     message: string
     count?: number
   } | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const resetEasterEgg = async () => {
     if (isResetting) return
@@ -18,6 +19,7 @@ export default function AdminResetPage() {
       setIsResetting(true)
       setResult(null)
 
+      // Reset the server-side counter and leaderboard
       const response = await fetch("/api/easter-egg", {
         method: "DELETE",
       })
@@ -28,9 +30,22 @@ export default function AdminResetPage() {
 
       const data = await response.json()
 
+      // Also clear the local storage flag that tracks if the current user found the easter egg
+      localStorage.removeItem("hasFoundSuperEasterEgg")
+
+      // Dispatch an event to notify other components about the reset
+      window.dispatchEvent(
+        new CustomEvent("easterEggReset", {
+          detail: {
+            count: 0,
+            storage: data.storage,
+          },
+        }),
+      )
+
       setResult({
         success: true,
-        message: "Easter egg counter and leaderboard reset successfully!",
+        message: "Easter egg counter, leaderboard, and local user state reset successfully!",
         count: data.count,
       })
     } catch (error) {
@@ -40,7 +55,7 @@ export default function AdminResetPage() {
         message: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       })
     } finally {
-      setIsResetting(false)
+      setIsSubmitting(false)
     }
   }
 
@@ -53,7 +68,8 @@ export default function AdminResetPage() {
           <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
             <h2 className="font-medium text-purple-800 mb-2">Easter Egg Counter Reset</h2>
             <p className="text-sm text-gray-600 mb-4">
-              This will reset the easter egg counter and clear the leaderboard. This action cannot be undone.
+              This will reset the easter egg counter, clear the leaderboard, and remove the "including you" message.
+              This action cannot be undone.
             </p>
 
             <motion.button

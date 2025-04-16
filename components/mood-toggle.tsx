@@ -58,10 +58,21 @@ export default function MoodToggle() {
       }
     }
 
+    // Listen for easter egg reset events from the admin page
+    const handleEasterEggReset = (event: CustomEvent) => {
+      setEasterEggCounter(0)
+      setHasFoundEasterEgg(false)
+      if (event.detail.storage) {
+        setStorageType(event.detail.storage)
+      }
+    }
+
     window.addEventListener("easterEggFound", handleEasterEggFound as EventListener)
+    window.addEventListener("easterEggReset", handleEasterEggReset as EventListener)
 
     return () => {
       window.removeEventListener("easterEggFound", handleEasterEggFound as EventListener)
+      window.removeEventListener("easterEggReset", handleEasterEggReset as EventListener)
     }
   }, [])
 
