@@ -9,6 +9,7 @@ import { FacebookIcon } from "./icons/facebook-icon"
 import { YoutubeIcon } from "./icons/youtube-icon"
 import { LinkedinIcon } from "./icons/linkedin-icon"
 import Image from "next/image"
+import EasterEggLeaderboardEntry from "./easter-egg-leaderboard-entry"
 
 export default function Footer() {
   const [showEasterEgg, setShowEasterEgg] = useState(false)
@@ -19,6 +20,7 @@ export default function Footer() {
   const [showUltraEasterEgg, setShowUltraEasterEgg] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [storageType, setStorageType] = useState<string | null>(null)
+  const [showLeaderboardEntry, setShowLeaderboardEntry] = useState(false)
   const clickTimerRef = useRef<NodeJS.Timeout | null>(null)
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -135,6 +137,9 @@ export default function Footer() {
         localStorage.setItem("hasFoundSuperEasterEgg", "true")
         setHasFoundEasterEgg(true)
 
+        // Show the leaderboard entry popup
+        setShowLeaderboardEntry(true)
+
         // Update the counter in the mood-toggle component as well
         window.dispatchEvent(
           new CustomEvent("easterEggFound", {
@@ -237,6 +242,29 @@ export default function Footer() {
     }, 2000)
   }
 
+  // Handle name submission for the leaderboard
+  const handleNameSubmit = async (name: string) => {
+    try {
+      const response = await fetch("/api/easter-egg", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save name")
+      }
+
+      // Refresh the counter after adding the name
+      await fetchEasterEggCount()
+    } catch (error) {
+      console.error("Error submitting name:", error)
+      throw error
+    }
+  }
+
   return (
     <motion.footer
       className="mt-16 mb-8 text-center relative"
@@ -307,7 +335,7 @@ export default function Footer() {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
                 >
-                  You're student #{easterEggCounter + 1} to discover this!
+                  You're student #{easterEggCounter} to discover this!
                   {storageType === "memory" && <span className="opacity-60"> (preview mode)</span>}
                 </motion.p>
               )}
@@ -361,6 +389,17 @@ export default function Footer() {
               </div>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Leaderboard Entry Popup */}
+      <AnimatePresence>
+        {showLeaderboardEntry && (
+          <EasterEggLeaderboardEntry
+            position={easterEggCounter}
+            onClose={() => setShowLeaderboardEntry(false)}
+            onSubmit={handleNameSubmit}
+          />
         )}
       </AnimatePresence>
 

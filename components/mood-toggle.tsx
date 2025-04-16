@@ -1,9 +1,10 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useMood } from "@/context/mood-context"
 import { useState, useEffect } from "react"
 import { TrophyIcon } from "lucide-react"
+import LeaderboardModal from "./leaderboard-modal"
 
 export default function MoodToggle() {
   const { mood, setMood } = useMood()
@@ -12,6 +13,7 @@ export default function MoodToggle() {
   const [hasFoundEasterEgg, setHasFoundEasterEgg] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [storageType, setStorageType] = useState<string | null>(null)
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
 
   const moodOptions = [
     { id: "chill", emoji: "☕", label: "Chill", color: "from-blue-200 to-purple-200" },
@@ -172,7 +174,7 @@ export default function MoodToggle() {
         })}
       </div>
       <motion.div
-        className="mt-4 flex justify-center"
+        className="mt-4 flex flex-col items-center"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.5 }}
@@ -192,7 +194,26 @@ export default function MoodToggle() {
             )}
           </span>
         </div>
+
+        {easterEggCounter > 0 && (
+          <motion.button
+            onClick={() => setShowLeaderboard(true)}
+            className="mt-2 px-4 py-1.5 bg-purple-600/80 hover:bg-purple-600 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-purple-500/30 flex items-center gap-1.5 transition-colors shadow-md"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+          >
+            <TrophyIcon className="w-3.5 h-3.5 text-yellow-400" />
+            View Discovery Board
+          </motion.button>
+        )}
       </motion.div>
+
+      <AnimatePresence>
+        {showLeaderboard && <LeaderboardModal onClose={() => setShowLeaderboard(false)} />}
+      </AnimatePresence>
     </motion.div>
   )
 }

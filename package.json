@@ -62,8 +62,8 @@
     "fs": "latest",
     "path": "latest",
     "framer-motion": "latest",
-    "@vercel/kv": "latest",
-    "canvas-confetti": "latest"
+    "canvas-confetti": "latest",
+    "@vercel/kv": "latest"
   },
   "devDependencies": {
     "@types/node": "^22",
