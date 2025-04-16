@@ -119,39 +119,48 @@ export default function LeaderboardModal({ onClose }: LeaderboardModalProps) {
               <p className="text-gray-300 mt-2">Be the first to find the easter egg!</p>
             </div>
           ) : (
-            <div className="space-y-1">
-              <div className="grid grid-cols-12 gap-2 text-gray-300 text-sm font-bold mb-2 px-2 border-b border-gray-700 pb-2">
+            <div>
+              {/* Fixed header */}
+              <div className="grid grid-cols-12 gap-2 text-gray-300 text-sm font-bold mb-2 px-2 border-b border-gray-700 pb-2 sticky top-0 bg-gray-900/90">
                 <div className="col-span-2">RANK</div>
                 <div className="col-span-3">FOUND</div>
                 <div className="col-span-7">PLAYER</div>
               </div>
+              
+              {/* Scrollable entries */}
+              <div className="space-y-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                {leaderboard.map((entry, index) => {
+                  // Calculate the display position (index + 1)
+                  const displayPosition = index + 1
 
-              {leaderboard.map((entry, index) => (
-                <motion.div
-                  key={`${entry.position}-${entry.name}`}
-                  className={`grid grid-cols-12 gap-2 p-2 rounded ${
-                    index % 2 === 0 ? "bg-purple-900/30" : "bg-purple-900/10"
-                  } ${index < 3 ? "border-l-4" : ""} ${
-                    index === 0
-                      ? "border-yellow-400"
-                      : index === 1
-                        ? "border-gray-300"
-                        : index === 2
-                          ? "border-amber-700"
-                          : ""
-                  }`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <div className="col-span-2 font-mono text-white flex items-center">{getMedal(index + 1)}</div>
-                  <div className="col-span-3 font-mono text-green-400">
-                    {entry.position}
-                    <sup>{getOrdinalSuffix(entry.position)}</sup>
-                  </div>
-                  <div className="col-span-7 font-mono text-white">{entry.name}</div>
-                </motion.div>
-              ))}
+                  return (
+                    <motion.div
+                      key={`${entry.position}-${entry.name}`}
+                      className={`grid grid-cols-12 gap-2 p-2 rounded ${
+                        index % 2 === 0 ? "bg-purple-900/30" : "bg-purple-900/10"
+                      } ${index < 3 ? "border-l-4" : ""} ${
+                        index === 0
+                          ? "border-yellow-400"
+                          : index === 1
+                            ? "border-gray-300"
+                            : index === 2
+                              ? "border-amber-700"
+                              : ""
+                      }`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <div className="col-span-2 font-mono text-white flex items-center">{getMedal(displayPosition)}</div>
+                      <div className="col-span-3 font-mono text-green-400">
+                        {displayPosition}
+                        <sup>{getOrdinalSuffix(displayPosition)}</sup>
+                      </div>
+                      <div className="col-span-7 font-mono text-white">{entry.name}</div>
+                    </motion.div>
+                  )
+                })}
+              </div>
             </div>
           )}
         </div>
@@ -165,5 +174,22 @@ export default function LeaderboardModal({ onClose }: LeaderboardModalProps) {
         <div className="text-center text-xs text-gray-300 mt-4">Find the easter egg to add your initials!</div>
       </motion.div>
     </motion.div>
+  \
+  ;<style jsx global>{`
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(75, 85, 99, 0.2);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(139, 92, 246, 0.5);
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(139, 92, 246, 0.7);
+      }
+    `}</style>
   )
 }

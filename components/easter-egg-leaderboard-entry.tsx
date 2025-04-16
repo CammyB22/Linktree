@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import type React from "react"
+
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { X } from "lucide-react"
 
@@ -11,77 +13,17 @@ interface EasterEggLeaderboardEntryProps {
 }
 
 export default function EasterEggLeaderboardEntry({ position, onClose, onSubmit }: EasterEggLeaderboardEntryProps) {
-  const [initials, setInitials] = useState(["", "", ""])
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [name, setName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  // Available characters for arcade-style input
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?*#$".split("")
+  // Submit the name
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
 
-  // Handle character selection
-  const selectCharacter = (index: number, direction: "up" | "down") => {
-    setInitials((prev) => {
-      const newInitials = [...prev]
-      const currentChar = prev[index]
-
-      let charIndex = currentChar ? characters.indexOf(currentChar) : -1
-
-      if (direction === "up") {
-        charIndex = charIndex >= characters.length - 1 ? 0 : charIndex + 1
-      } else {
-        charIndex = charIndex <= 0 ? characters.length - 1 : charIndex - 1
-      }
-
-      newInitials[index] = characters[charIndex]
-      return newInitials
-    })
-  }
-
-  // Move to next or previous initial slot
-  const moveSelection = (direction: "next" | "prev") => {
-    if (direction === "next") {
-      setActiveIndex((prev) => (prev >= 2 ? 0 : prev + 1))
-    } else {
-      setActiveIndex((prev) => (prev <= 0 ? 2 : prev - 1))
-    }
-  }
-
-  // Handle keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (success) return
-
-      switch (e.key) {
-        case "ArrowUp":
-          selectCharacter(activeIndex, "up")
-          break
-        case "ArrowDown":
-          selectCharacter(activeIndex, "down")
-          break
-        case "ArrowLeft":
-          moveSelection("prev")
-          break
-        case "ArrowRight":
-          moveSelection("next")
-          break
-        case "Enter":
-          if (initials.every((initial) => initial)) {
-            handleSubmit()
-          }
-          break
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [activeIndex, initials, success])
-
-  // Submit the initials
-  const handleSubmit = async () => {
-    if (initials.some((initial) => !initial)) {
-      setError("Please enter all 3 initials")
+    if (!name.trim()) {
+      setError("Please enter your name or initials")
       return
     }
 
@@ -89,7 +31,7 @@ export default function EasterEggLeaderboardEntry({ position, onClose, onSubmit 
     setError(null)
 
     try {
-      await onSubmit(initials.join(""))
+      await onSubmit(name.trim().toUpperCase())
       setSuccess(true)
 
       // Close the popup after showing success message
@@ -97,8 +39,8 @@ export default function EasterEggLeaderboardEntry({ position, onClose, onSubmit 
         onClose()
       }, 2000)
     } catch (err) {
-      setError("Failed to save your initials. Please try again.")
-      console.error("Error submitting initials:", err)
+      setError("Failed to save your name. Please try again.")
+      console.error("Error submitting name:", err)
     } finally {
       setIsSubmitting(false)
     }
@@ -164,69 +106,38 @@ export default function EasterEggLeaderboardEntry({ position, onClose, onSubmit 
           </div>
 
           {!success ? (
-            <div>
-              <p className="text-gray-200 text-center mb-4 font-bold">ENTER YOUR INITIALS:</p>
-              <div className="flex justify-center gap-4 mb-6">
-                {initials.map((char, index) => (
-                  <div key={index} className="relative">
-                    <div
-                      className={`w-16 h-20 border-2 ${
-                        index === activeIndex
-                          ? "border-yellow-400 bg-purple-900/50"
-                          : "border-purple-700 bg-purple-900/20"
-                      } flex items-center justify-center text-4xl font-bold font-mono ${
-                        index === activeIndex ? "text-white" : "text-gray-300"
-                      }`}
-                    >
-                      {char || "_"}
-                    </div>
-
-                    {index === activeIndex && (
-                      <>
-                        <button
-                          onClick={() => selectCharacter(index, "up")}
-                          className="absolute -top-8 left-0 right-0 mx-auto w-8 h-8 bg-purple-800 hover:bg-purple-700 text-white flex items-center justify-center rounded-full"
-                        >
-                          ▲
-                        </button>
-                        <button
-                          onClick={() => selectCharacter(index, "down")}
-                          className="absolute -bottom-8 left-0 right-0 mx-auto w-8 h-8 bg-purple-800 hover:bg-purple-700 text-white flex items-center justify-center rounded-full"
-                        >
-                          ▼
-                        </button>
-                      </>
-                    )}
-                  </div>
-                ))}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-6">
+                <label htmlFor="name" className="block text-gray-200 text-center mb-4 font-bold">
+                  ENTER YOUR NAME:
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={10}
+                  placeholder="Your name or initials"
+                  className="w-full bg-purple-900/50 border-2 border-purple-700 focus:border-purple-500 text-white text-center py-3 px-4 rounded-md text-xl font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  autoFocus
+                />
+                <p className="text-gray-400 text-xs mt-2 text-center">
+                  Maximum 10 characters (letters will be displayed in uppercase)
+                </p>
               </div>
 
-              <div className="flex justify-center gap-3 mt-8">
+              <div className="flex justify-center">
                 <button
-                  onClick={() => moveSelection("prev")}
-                  className="px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white font-medium rounded-md"
-                >
-                  ◀ PREV
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting || initials.some((initial) => !initial)}
-                  className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-medium rounded-md hover:from-indigo-700 hover:to-purple-800 focus:outline-none disabled:opacity-50"
+                  type="submit"
+                  disabled={isSubmitting || !name.trim()}
+                  className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-700 text-white font-medium rounded-md hover:from-indigo-700 hover:to-purple-800 focus:outline-none disabled:opacity-50 transition-all duration-200"
                 >
                   {isSubmitting ? "SAVING..." : "SUBMIT"}
-                </button>
-                <button
-                  onClick={() => moveSelection("next")}
-                  className="px-4 py-2 bg-indigo-800 hover:bg-indigo-700 text-white font-medium rounded-md"
-                >
-                  NEXT ▶
                 </button>
               </div>
 
               {error && <p className="mt-4 text-sm text-red-400 text-center">{error}</p>}
-
-              <p className="text-center text-xs text-gray-400 mt-4">Use arrow keys to navigate and select characters</p>
-            </div>
+            </form>
           ) : (
             <div className="text-center py-4">
               <motion.div
@@ -235,7 +146,7 @@ export default function EasterEggLeaderboardEntry({ position, onClose, onSubmit 
                 transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
                 <div className="text-green-400 text-lg font-bold mb-2 font-mono">DISCOVERY RECORDED!</div>
-                <p className="text-purple-300 font-mono">YOUR INITIALS HAVE BEEN ADDED</p>
+                <p className="text-purple-300 font-mono">YOUR NAME HAS BEEN ADDED</p>
               </motion.div>
             </div>
           )}
