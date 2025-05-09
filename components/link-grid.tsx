@@ -17,13 +17,22 @@ const linkData = [
     order: 1,
   },
   {
+    id: "book-viewing",
+    title: "Book a Viewing",
+    url: "https://form.asana.com/?k=_1bpNP5dLgGSorUeSAI2zg&d=279345687743318",
+    description: "See your future home in person 🏠",
+    icon: "👁️",
+    active: true,
+    order: 2,
+  },
+  {
     id: "2",
     title: "CK mini Café",
     url: "https://www.instagram.com/ckmini_cafe",
     description: "Get your daily drip ☕",
     icon: "☕",
     active: true,
-    order: 2,
+    order: 3,
   },
   {
     id: "3",
@@ -32,7 +41,7 @@ const linkData = [
     description: "Weekend reset? Book now 🌴",
     icon: "🌴",
     active: true,
-    order: 3,
+    order: 4,
   },
   {
     id: "4",
@@ -41,7 +50,7 @@ const linkData = [
     description: "Connect. Collaborate. CK Club 💼",
     icon: "💼",
     active: true,
-    order: 4,
+    order: 5,
   },
   {
     id: "5",
@@ -50,7 +59,7 @@ const linkData = [
     description: "Room cleans, Wi-Fi upgrades + merch 🛍️",
     icon: "🛍️",
     active: true,
-    order: 5,
+    order: 6,
   },
   {
     id: "6",
@@ -59,7 +68,7 @@ const linkData = [
     description: "Watch our story unfold 🎥",
     icon: "🎥",
     active: true,
-    order: 6,
+    order: 7,
   },
   {
     id: "7",
@@ -68,7 +77,7 @@ const linkData = [
     description: "Exclusive tech perks for CK students 🍏",
     icon: "🍏",
     active: true,
-    order: 7,
+    order: 8,
   },
   {
     id: "8",
@@ -77,7 +86,7 @@ const linkData = [
     description: "Work where you stay 💻",
     icon: "💻",
     active: true,
-    order: 8,
+    order: 9,
   },
   {
     id: "rebookers",
@@ -86,7 +95,7 @@ const linkData = [
     description: "Secure your spot for next year 🏠",
     icon: "🔄",
     active: true,
-    order: 9,
+    order: 10,
     comingSoon: true, // Add this flag to identify the coming soon card
   },
 ]
