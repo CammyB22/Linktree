@@ -5,6 +5,7 @@ import type React from "react"
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { useMood } from "@/context/mood-context"
 import { useEffect, useState, useRef } from "react"
+import { track } from "@vercel/analytics"
 
 interface LinkCardProps {
   link: {
@@ -55,6 +56,16 @@ export default function LinkCard({ link, index }: LinkCardProps) {
   useEffect(() => {
     setIsMounted(true)
   }, [])
+
+  // Handle link click with analytics tracking
+  const handleLinkClick = () => {
+    // Track the click event for analytics
+    track("link_click", {
+      linkId: link.id,
+      linkTitle: link.title,
+      linkUrl: link.url,
+    })
+  }
 
   const item = {
     hidden: { opacity: 0, y: 20 },
@@ -161,6 +172,14 @@ export default function LinkCard({ link, index }: LinkCardProps) {
     )
   }
 
+  // Add special highlight for Book a Viewing card
+  const isBookViewing = link.id === "book-viewing"
+  const cardClasses = `relative ${
+    isBookViewing
+      ? "bg-white/30 backdrop-blur-md rounded-xl p-4 border-2 border-yellow-300/60 hover:shadow-xl transition-all overflow-hidden shadow-lg"
+      : "bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
+  }`
+
   // Regular clickable card
   return (
     <motion.a
@@ -173,10 +192,11 @@ export default function LinkCard({ link, index }: LinkCardProps) {
         scale: 0.97,
         transition: { duration: 0.2 / animationSpeed },
       }}
+      onClick={handleLinkClick}
     >
       <motion.div
         ref={cardRef}
-        className="relative bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
+        className={cardClasses}
         style={{
           rotateX,
           rotateY,
@@ -200,9 +220,20 @@ export default function LinkCard({ link, index }: LinkCardProps) {
           transition={{ duration: 1.5, ease: "easeInOut" }}
         />
 
+        {/* Special highlight for Book a Viewing */}
+        {isBookViewing && (
+          <div className="absolute top-0 right-0">
+            <div className="bg-yellow-400 text-xs font-bold px-2 py-1 rounded-bl-lg text-gray-800">NEW</div>
+          </div>
+        )}
+
         <motion.div className="flex items-center relative z-10">
           <motion.div
-            className="w-12 h-12 flex items-center justify-center text-2xl bg-white/50 backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border border-white/50"
+            className={`w-12 h-12 flex items-center justify-center text-2xl ${
+              isBookViewing ? "bg-yellow-100/70" : "bg-white/50"
+            } backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border ${
+              isBookViewing ? "border-yellow-200/70" : "border-white/50"
+            }`}
             whileHover="hover"
             initial="initial"
             animate={isHovered ? "hover" : "initial"}
