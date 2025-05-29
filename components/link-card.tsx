@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import Link from "next/link" // Import Link from next/link
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { useMood } from "@/context/mood-context"
 import { useEffect, useState, useRef } from "react"
@@ -174,81 +174,72 @@ export default function LinkCard({ link, index }: LinkCardProps) {
 
   // Add special highlight for Book a Viewing card
   const isBookViewing = link.id === "book-viewing"
-  const cardClasses = `relative ${
-    isBookViewing
-      ? "bg-white/30 backdrop-blur-md rounded-xl p-4 border-2 border-yellow-300/60 hover:shadow-xl transition-all overflow-hidden shadow-lg"
-      : "bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
-  }`
+  const cardClasses =
+    "relative bg-white/20 backdrop-blur-md rounded-xl p-4 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
 
   // Regular clickable card
   return (
-    <motion.a
+    <Link // Use Next.js Link component
       href={link.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block"
-      variants={item}
-      whileTap={{
-        scale: 0.97,
-        transition: { duration: 0.2 / animationSpeed },
-      }}
-      onClick={handleLinkClick}
+      passHref
+      legacyBehavior={false} // Use new Link behavior
     >
-      <motion.div
-        ref={cardRef}
-        className={cardClasses}
+      <motion.div // This div is now the direct child of Link and will receive the href
+        className="block"
+        variants={item}
+        whileTap={{
+          scale: 0.97,
+          transition: { duration: 0.2 / animationSpeed },
+        }}
+        onClick={handleLinkClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        ref={cardRef} // Ref moved here
         style={{
+          // Motion styles moved here
           rotateX,
           rotateY,
           boxShadow: isHovered ? getHoverShadow() : "0 8px 15px rgba(0, 0, 0, 0.1)",
         }}
-        whileHover={{
-          scale: 1.03,
-          transition: {
-            duration: 0.3,
-            ease: "easeOut",
-          },
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={handleMouseLeave}
       >
-        {/* Subtle shine effect */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0"
-          animate={isHovered ? { opacity: 0.5, left: ["100%", "-100%"] } : { opacity: 0 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
-        />
-
-        {/* Special highlight for Book a Viewing */}
-        {isBookViewing && (
-          <div className="absolute top-0 right-0">
-            <div className="bg-yellow-400 text-xs font-bold px-2 py-1 rounded-bl-lg text-gray-800">NEW</div>
-          </div>
-        )}
-
-        <motion.div className="flex items-center relative z-10">
+        <motion.div // This div is for styling and hover effects, not for click handling
+          className={cardClasses}
+          whileHover={{
+            // whileHover should be on the clickable element or its direct motion child
+            scale: 1.03,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          }}
+        >
+          {/* Subtle shine effect */}
           <motion.div
-            className={`w-12 h-12 flex items-center justify-center text-2xl ${
-              isBookViewing ? "bg-yellow-100/70" : "bg-white/50"
-            } backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border ${
-              isBookViewing ? "border-yellow-200/70" : "border-white/50"
-            }`}
-            whileHover="hover"
-            initial="initial"
-            animate={isHovered ? "hover" : "initial"}
-            variants={iconVariants}
-          >
-            <span>{link.icon}</span>
+            className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0"
+            animate={isHovered ? { opacity: 0.5, left: ["100%", "-100%"] } : { opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+          />
+
+          <motion.div className="flex items-center relative z-10">
+            <motion.div
+              className="w-12 h-12 flex items-center justify-center text-2xl bg-white/50 backdrop-blur-sm rounded-full mr-4 overflow-hidden shadow-inner border border-white/50"
+              whileHover="hover"
+              initial="initial"
+              animate={isHovered ? "hover" : "initial"}
+              variants={iconVariants}
+            >
+              <span>{link.icon}</span>
+            </motion.div>
+            <div>
+              <h3 className="font-medium text-lg">{link.title}</h3>
+              <p className="text-sm text-gray-600">
+                {link.title === "Careers @ CK" ? "Join our team" : link.description}
+              </p>
+            </div>
           </motion.div>
-          <div>
-            <h3 className="font-medium text-lg">{link.title}</h3>
-            <p className="text-sm text-gray-600">
-              {link.title === "Careers @ CK" ? "Join our team" : link.description}
-            </p>
-          </div>
         </motion.div>
       </motion.div>
-    </motion.a>
+    </Link>
   )
 }
