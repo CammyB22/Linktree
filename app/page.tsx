@@ -47,7 +47,7 @@ export default function Home() {
       <main className="min-h-screen relative overflow-hidden">
         <AnimatedBackground mousePosition={mousePosition} deviceOrientation={deviceOrientation} />
 
-        <div className="container mx-auto px-4 py-8 relative z-10">
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 relative z-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

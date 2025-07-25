@@ -8,13 +8,31 @@ import { useMood } from "@/context/mood-context"
 // Mock data - would be fetched from Airtable in production
 const linkData = [
   {
+    id: "rebookers",
+    title: "Rebookers 2026",
+    url: "https://campuskey.modus10.co.za/login",
+    description: "Secure your spot for next year 🏠",
+    icon: "🔄",
+    active: true,
+    order: 1, // Changed from 10 to 1
+  },
+  {
+    id: "public-applications",
+    title: "Public Applications",
+    url: "https://campuskey.co.za/apply", // Update this URL as needed
+    description: "Applications open to the public 📝",
+    icon: "📝",
+    active: true,
+    order: 3, // Place it second in the list
+  },
+  {
     id: "1",
     title: "CampusKey Website",
     url: "https://campuskey.co.za/",
     description: "Visit our full site 🌐",
     icon: "🌐",
     active: true,
-    order: 1,
+    order: 2,
   },
   {
     id: "book-viewing",
@@ -23,7 +41,7 @@ const linkData = [
     description: "See your future home in person 🏠",
     icon: "👁️",
     active: true,
-    order: 2,
+    order: 4,
   },
   {
     id: "2",
@@ -32,7 +50,7 @@ const linkData = [
     description: "Get your daily drip ☕",
     icon: "☕",
     active: true,
-    order: 3,
+    order: 5,
   },
   {
     id: "3",
@@ -41,7 +59,7 @@ const linkData = [
     description: "Weekend reset? Book now 🌴",
     icon: "🌴",
     active: true,
-    order: 4,
+    order: 6,
   },
   {
     id: "4",
@@ -50,7 +68,7 @@ const linkData = [
     description: "Connect. Collaborate. CK Club 💼",
     icon: "💼",
     active: true,
-    order: 5,
+    order: 7,
   },
   {
     id: "5",
@@ -59,7 +77,7 @@ const linkData = [
     description: "Room cleans, Wi-Fi upgrades + merch 🛍️",
     icon: "🛍️",
     active: true,
-    order: 6,
+    order: 8,
   },
   {
     id: "6",
@@ -68,7 +86,7 @@ const linkData = [
     description: "Watch our story unfold 🎥",
     icon: "🎥",
     active: true,
-    order: 7,
+    order: 9,
   },
   {
     id: "7",
@@ -77,7 +95,7 @@ const linkData = [
     description: "Exclusive tech perks for CK students 🍏",
     icon: "🍏",
     active: true,
-    order: 8,
+    order: 10,
   },
   {
     id: "8",
@@ -86,22 +104,14 @@ const linkData = [
     description: "Work where you stay 💻",
     icon: "💻",
     active: true,
-    order: 9,
-  },
-  {
-    id: "rebookers",
-    title: "Rebookers 2026",
-    url: "#",
-    description: "Secure your spot for next year 🏠",
-    icon: "🔄",
-    active: true,
-    order: 10,
-    comingSoon: true, // Add this flag to identify the coming soon card
+    order: 11,
   },
 ]
 
 export default function LinkGrid() {
   const [links, setLinks] = useState([])
+  const [rebookersCard, setRebookersCard] = useState(null)
+  const [otherCards, setOtherCards] = useState([])
   const { animationSpeed } = useMood()
 
   useEffect(() => {
@@ -110,6 +120,12 @@ export default function LinkGrid() {
       // In a real implementation, this would be an API call to Airtable
       const activeLinks = linkData.filter((link) => link.active).sort((a, b) => a.order - b.order)
 
+      // Separate rebookers card from other cards
+      const rebookers = activeLinks.find((link) => link.id === "rebookers")
+      const others = activeLinks.filter((link) => link.id !== "rebookers")
+
+      setRebookersCard(rebookers)
+      setOtherCards(others)
       setLinks(activeLinks)
     }
 
@@ -127,16 +143,76 @@ export default function LinkGrid() {
     },
   }
 
+  const otherCardsContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1 / animationSpeed,
+        delayChildren: 0.5, // Slight delay after the rebookers card
+      },
+    },
+  }
+
   return (
-    <motion.div
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6" // Slightly increased gap
-      variants={container}
-      initial="hidden"
-      animate="show"
-    >
-      {links.map((link, index) => (
-        <LinkCard key={link.id} link={link} index={index} />
-      ))}
-    </motion.div>
+    <div className="space-y-8">
+      {/* Top Section Divider */}
+      <motion.div
+        className="flex items-center justify-center py-4"
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-px bg-gradient-to-r from-transparent to-gray-400/60"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-500/50 backdrop-blur-sm border border-gray-400/60 shadow-sm"></div>
+          <div className="w-16 h-px bg-gray-400/60"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-500/50 backdrop-blur-sm border border-gray-400/60 shadow-sm"></div>
+          <div className="w-8 h-px bg-gradient-to-l from-transparent to-gray-400/60"></div>
+        </div>
+      </motion.div>
+
+      {/* Top Section - Rebookers Card */}
+      {rebookersCard && (
+        <motion.div
+          className="w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <div className="max-w-2xl mx-auto">
+            <LinkCard link={rebookersCard} index={0} />
+          </div>
+        </motion.div>
+      )}
+
+      {/* Middle Section Divider */}
+      <motion.div
+        className="flex items-center justify-center py-4"
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+      >
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-px bg-gradient-to-r from-transparent to-gray-400/60"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-500/50 backdrop-blur-sm border border-gray-400/60 shadow-sm"></div>
+          <div className="w-16 h-px bg-gray-400/60"></div>
+          <div className="w-2 h-2 rounded-full bg-gray-500/50 backdrop-blur-sm border border-gray-400/60 shadow-sm"></div>
+          <div className="w-8 h-px bg-gradient-to-l from-transparent to-gray-400/60"></div>
+        </div>
+      </motion.div>
+
+      {/* Bottom Section - Other Cards */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6"
+        variants={otherCardsContainer}
+        initial="hidden"
+        animate="show"
+      >
+        {otherCards.map((link, index) => (
+          <LinkCard key={link.id} link={link} index={index + 1} />
+        ))}
+      </motion.div>
+    </div>
   )
 }

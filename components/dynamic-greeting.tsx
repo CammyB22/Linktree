@@ -327,7 +327,10 @@ export default function DynamicGreeting() {
       transition={{ duration: 0.7 }}
     >
       {/* Main card */}
-      <div className="rounded-2xl backdrop-blur-md p-5 md:p-8 relative overflow-hidden" style={getBackgroundStyles()}>
+      <div
+        className="rounded-2xl backdrop-blur-md p-4 sm:p-5 md:p-8 relative overflow-hidden"
+        style={getBackgroundStyles()}
+      >
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
         <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
@@ -345,7 +348,7 @@ export default function DynamicGreeting() {
               {!isRefreshing && (
                 <motion.h1
                   key={greeting}
-                  className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800 text-center leading-tight tracking-tight"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800 text-center leading-tight tracking-tight"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
@@ -364,7 +367,7 @@ export default function DynamicGreeting() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
           >
-            <p className="text-xl md:text-2xl text-gray-700 font-medium">CampusKey life, streamlined!</p>
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 font-medium">CampusKey life, streamlined!</p>
           </motion.div>
 
           {/* Subtitle */}
@@ -374,7 +377,7 @@ export default function DynamicGreeting() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
           >
-            <p className="text-lg text-gray-600">{subtitle}</p>
+            <p className="text-base sm:text-lg text-gray-600">{subtitle}</p>
           </motion.div>
         </div>
       </div>

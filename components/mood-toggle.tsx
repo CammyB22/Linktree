@@ -83,7 +83,7 @@ export default function MoodToggle() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.5 }}
     >
-      <div className="flex space-x-3">
+      <div className="flex space-x-2 sm:space-x-3">
         {moodOptions.map((option) => {
           const isActive = mood === option.id
           const isHovered = hoveredMood === option.id
@@ -91,7 +91,7 @@ export default function MoodToggle() {
           return (
             <motion.button
               key={option.id}
-              className={`relative px-5 py-3 rounded-xl flex items-center justify-center overflow-hidden ${
+              className={`relative px-3 sm:px-5 py-2 sm:py-3 rounded-xl flex items-center justify-center overflow-hidden ${
                 isActive ? "bg-white shadow-sm" : "bg-[#e6fff0]/70 backdrop-blur-sm hover:bg-white/50"
               }`}
               onMouseEnter={() => setHoveredMood(option.id)}
@@ -141,7 +141,7 @@ export default function MoodToggle() {
 
               {/* Emoji with bounce effect */}
               <motion.span
-                className="mr-2 text-lg"
+                className="mr-1 sm:mr-2 text-base sm:text-lg"
                 animate={
                   isActive
                     ? {
@@ -159,7 +159,7 @@ export default function MoodToggle() {
                 {option.emoji}
               </motion.span>
 
-              <span className="font-medium relative">
+              <span className="font-medium relative text-sm sm:text-base">
                 {option.label}
 
                 {/* Underline animation when active */}
@@ -190,9 +190,9 @@ export default function MoodToggle() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.5 }}
       >
-        <div className="bg-white/30 backdrop-blur-md rounded-full px-4 py-2 shadow-md border border-white/40 flex items-center space-x-2">
+        <div className="bg-white/30 backdrop-blur-md rounded-full px-3 sm:px-4 py-1.5 sm:py-2 shadow-md border border-white/40 flex items-center space-x-1 sm:space-x-2">
           <TrophyIcon className="w-4 h-4 text-yellow-500" />
-          <span className="text-sm font-medium">
+          <span className="text-xs sm:text-sm font-medium">
             {isLoading ? (
               "Loading easter egg stats..."
             ) : (
@@ -209,7 +209,7 @@ export default function MoodToggle() {
         {easterEggCounter > 0 && (
           <motion.button
             onClick={() => setShowLeaderboard(true)}
-            className="mt-2 px-4 py-1.5 bg-purple-600/80 hover:bg-purple-600 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-purple-500/30 flex items-center gap-1.5 transition-colors shadow-md"
+            className="mt-2 px-3 sm:px-4 py-1 sm:py-1.5 bg-purple-600/80 hover:bg-purple-600 backdrop-blur-sm rounded-full text-xs font-medium text-white border border-purple-500/30 flex items-center gap-1 sm:gap-1.5 transition-colors shadow-md"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 5 }}
