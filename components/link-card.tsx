@@ -58,9 +58,11 @@ export default function LinkCard({ link, index }: LinkCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const isRebookersCard = link.id === "rebookers"
-  const targetDate = "2025-08-06T08:00:00"
-  const countdown = useCountdown(targetDate)
-  const isCountdownFinished = countdown?.isFinished ?? true
+
+  // VIP rebooking period ends at midnight on September 3rd, 2025
+  const vipEndDate = "2025-09-04T00:00:00" // Midnight = start of Sept 4th
+  const vipCountdown = useCountdown(vipEndDate)
+  const isVipPeriodActive = !vipCountdown?.isFinished
 
   const isPublicApplicationsCard = link.id === "public-applications"
   const publicAppsTargetDate = "2025-09-04T08:00:00"
@@ -125,19 +127,13 @@ export default function LinkCard({ link, index }: LinkCardProps) {
     initial: { scale: 1, rotate: 0 },
     hover: {
       scale: 1.2,
-      rotate:
-        (link.icon === "🔄" && !isCountdownFinished) || (link.icon === "📝" && !isPublicAppsCountdownFinished)
-          ? 360
-          : 0,
+      rotate: link.icon === "🔄" ? 360 : 0,
       transition: {
         scale: { duration: 0.3 },
         rotate: {
           duration: 2,
           ease: "linear",
-          repeat:
-            (link.icon === "🔄" && !isCountdownFinished) || (link.icon === "📝" && !isPublicAppsCountdownFinished)
-              ? Number.POSITIVE_INFINITY
-              : 0,
+          repeat: link.icon === "🔄" ? Number.POSITIVE_INFINITY : 0,
         },
       },
     },
@@ -155,126 +151,6 @@ export default function LinkCard({ link, index }: LinkCardProps) {
       default:
         return "0 10px 25px rgba(147, 197, 253, 0.4)"
     }
-  }
-
-  // If it's the rebookers card and the countdown is NOT finished, render the timer card.
-  if (isRebookersCard && !isCountdownFinished) {
-    return (
-      <motion.div className="block" variants={item}>
-        <div className="relative rounded-xl p-0.5 bg-gradient-to-r from-purple-400/60 to-pink-400/60">
-          <motion.div
-            ref={cardRef}
-            className="relative bg-white/20 backdrop-blur-md rounded-xl p-3 sm:p-4 hover:shadow-xl transition-all overflow-hidden shadow-lg"
-            style={{
-              rotateX,
-              rotateY,
-              boxShadow: isHovered ? "0 10px 25px rgba(168, 85, 247, 0.3)" : "0 8px 15px rgba(0, 0, 0, 0.1)",
-            }}
-            whileHover={{
-              scale: 1.03,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-            }}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={handleMouseLeave}
-          >
-            {/* Subtle animated border glow */}
-            <motion.div
-              className="absolute inset-0 rounded-xl"
-              style={{
-                background: "linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1))",
-              }}
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Subtle shine effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0"
-              animate={isHovered ? { opacity: 0.5, left: ["100%", "-100%"] } : { opacity: 0 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-
-            <motion.div className="flex items-start relative z-10">
-              <motion.div
-                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-xl sm:text-2xl bg-gradient-to-br from-purple-100/80 to-pink-100/80 backdrop-blur-sm rounded-full mr-3 sm:mr-4 overflow-hidden shadow-inner border border-purple-200/50 flex-shrink-0"
-                whileHover="hover"
-                initial="initial"
-                animate={isHovered ? "hover" : "initial"}
-                variants={iconVariants}
-              >
-                <span>{link.icon}</span>
-              </motion.div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-base sm:text-lg mb-1 text-gray-800">Rebook for 2026</h3>
-
-                {/* Date display card */}
-                <div className="bg-gradient-to-r from-purple-50/80 to-pink-50/80 backdrop-blur-sm rounded-lg p-2 border border-purple-200/50 mb-3 shadow-sm">
-                  <p className="text-xs text-purple-700 font-medium text-center">
-                    📅 Opens: August 6th, 2025 at 8:00 AM
-                  </p>
-                </div>
-
-                {/* Countdown section with individual cards - Mobile optimized */}
-                <div className="bg-gradient-to-r from-purple-50/60 to-pink-50/60 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-purple-200/40">
-                  <p className="text-xs text-purple-700 mb-2 sm:mb-3 font-medium text-center">⏰ Unlocks In</p>
-                  <div className="flex justify-center items-center space-x-1 sm:space-x-2">
-                    {/* Days card */}
-                    <div className="bg-gradient-to-br from-purple-100/90 to-pink-100/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-purple-200/60 shadow-sm min-w-[35px] sm:min-w-[40px]">
-                      <div className="text-center">
-                        <div className="text-sm sm:text-lg font-bold text-purple-800">
-                          {String(countdown.days).padStart(2, "0")}
-                        </div>
-                        <div className="text-[8px] sm:text-[10px] text-purple-600 font-semibold">DAYS</div>
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-purple-600">:</div>
-                    {/* Hours card */}
-                    <div className="bg-gradient-to-br from-purple-100/90 to-pink-100/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-purple-200/60 shadow-sm min-w-[35px] sm:min-w-[40px]">
-                      <div className="text-center">
-                        <div className="text-sm sm:text-lg font-bold text-purple-800">
-                          {String(countdown.hours).padStart(2, "0")}
-                        </div>
-                        <div className="text-[8px] sm:text-[10px] text-purple-600 font-semibold">HRS</div>
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-purple-600">:</div>
-                    {/* Minutes card */}
-                    <div className="bg-gradient-to-br from-purple-100/90 to-pink-100/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-purple-200/60 shadow-sm min-w-[35px] sm:min-w-[40px]">
-                      <div className="text-center">
-                        <div className="text-sm sm:text-lg font-bold text-purple-800">
-                          {String(countdown.minutes).padStart(2, "0")}
-                        </div>
-                        <div className="text-[8px] sm:text-[10px] text-purple-600 font-semibold">MIN</div>
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-purple-600">:</div>
-                    {/* Seconds card */}
-                    <div className="bg-gradient-to-br from-purple-100/90 to-pink-100/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 border border-purple-200/60 shadow-sm min-w-[35px] sm:min-w-[40px]">
-                      <div className="text-center">
-                        <div className="text-sm sm:text-lg font-bold text-purple-800">
-                          {String(countdown.seconds).padStart(2, "0")}
-                        </div>
-                        <div className="text-[8px] sm:text-[10px] text-purple-600 font-semibold">SEC</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.div>
-    )
   }
 
   // If it's the public applications card and the countdown is NOT finished, render the timer card.
@@ -395,12 +271,88 @@ export default function LinkCard({ link, index }: LinkCardProps) {
     )
   }
 
+  // Special handling for Rebookers card - clean and elegant
+  if (isRebookersCard) {
+    return (
+      <Link href="https://campuskey.modus10.co.za/login" passHref legacyBehavior={false}>
+        <motion.div
+          className="block"
+          variants={item}
+          whileTap={{
+            scale: 0.97,
+            transition: { duration: 0.2 / animationSpeed },
+          }}
+          onClick={handleLinkClick}
+        >
+          <motion.div
+            ref={cardRef}
+            className="relative bg-white/20 backdrop-blur-md rounded-xl p-4 sm:p-5 border border-white/40 hover:shadow-xl transition-all overflow-hidden shadow-lg"
+            style={{
+              rotateX,
+              rotateY,
+              boxShadow: isHovered ? "0 15px 30px rgba(168, 85, 247, 0.2)" : "0 8px 15px rgba(0, 0, 0, 0.1)",
+            }}
+            whileHover={{
+              scale: 1.03,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={handleMouseLeave}
+          >
+            {/* Subtle shine effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/30 to-white/0 opacity-0"
+              animate={isHovered ? { opacity: 0.5, left: ["100%", "-100%"] } : { opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+            />
+
+            {/* Subtle accent line at top */}
+            <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-400/60 via-pink-400/60 to-purple-400/60 rounded-t-xl"></div>
+
+            <motion.div className="flex items-center relative z-10">
+              <motion.div
+                className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center text-xl sm:text-2xl bg-white/50 backdrop-blur-sm rounded-full mr-3 sm:mr-4 overflow-hidden shadow-inner border border-white/50"
+                whileHover="hover"
+                initial="initial"
+                animate={isHovered ? "hover" : "initial"}
+                variants={iconVariants}
+              >
+                <span>{link.icon}</span>
+              </motion.div>
+              <div className="flex-1">
+                <h3 className="font-medium text-base sm:text-lg mb-1 text-gray-800">Rebook for 2026</h3>
+                <p className="text-sm text-gray-600 mb-3">Secure your spot for next year 🏠</p>
+
+                {/* Clean status indicator */}
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span className="text-xs text-green-700 font-medium">Now open</span>
+                  {isVipPeriodActive && (
+                    <>
+                      <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                      <span className="text-xs text-orange-600">
+                        VIP period: {vipCountdown.days}d {vipCountdown.hours}h left
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                {/* Simple CTA */}
+                <div className="text-xs text-purple-600 font-medium">→ Click to secure your spot</div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </Link>
+    )
+  }
+
   // For all other cases (other cards, or rebookers card after countdown finishes):
-  const finalLink = isRebookersCard
-    ? { ...link, description: "Rebooking is now open! ✨" }
-    : isPublicApplicationsCard
-      ? { ...link, description: "Applications are now open! 🎉" }
-      : link
+  const finalLink = isPublicApplicationsCard ? { ...link, description: "Applications are now open! 🎉" } : link
 
   // If it's a coming soon card (and not the rebookers card, which is handled above)
   if (finalLink.comingSoon) {
