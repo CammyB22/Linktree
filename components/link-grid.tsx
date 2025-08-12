@@ -152,13 +152,24 @@ export default function LinkGrid() {
     },
   }
 
+  const rebookersContainer = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15 / animationSpeed,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
   const otherCardsContainer = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1 / animationSpeed,
-        delayChildren: 0.5, // Slight delay after the rebookers card
+        delayChildren: 0.7, // Increased delay after the rebookers cards
       },
     },
   }
@@ -183,13 +194,8 @@ export default function LinkGrid() {
 
       {/* Top Section - Rebookers Cards */}
       {rebookersCard && rebookersCard.length > 0 && (
-        <motion.div
-          className="w-full space-y-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          <div className="max-w-2xl mx-auto space-y-4">
+        <motion.div className="w-full" variants={rebookersContainer} initial="hidden" animate="show">
+          <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
             {rebookersCard.map((card, index) => (
               <LinkCard key={card.id} link={card} index={index} />
             ))}
@@ -202,7 +208,7 @@ export default function LinkGrid() {
         className="flex items-center justify-center py-4"
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: 0.8, delay: 0.8 }}
       >
         <div className="flex items-center space-x-2">
           <div className="w-8 h-px bg-gradient-to-r from-transparent to-gray-400/60"></div>
@@ -221,7 +227,7 @@ export default function LinkGrid() {
         animate="show"
       >
         {otherCards.map((link, index) => (
-          <LinkCard key={link.id} link={link} index={index + 1} />
+          <LinkCard key={link.id} link={link} index={index + 2} />
         ))}
       </motion.div>
     </div>
