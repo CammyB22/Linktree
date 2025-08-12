@@ -195,9 +195,11 @@ export default function LinkGrid() {
       {/* Top Section - Rebookers Cards */}
       {rebookersCard && rebookersCard.length > 0 && (
         <motion.div className="w-full" variants={rebookersContainer} initial="hidden" animate="show">
-          <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
+          <div className="max-w-2xl mx-auto">
             {rebookersCard.map((card, index) => (
-              <LinkCard key={card.id} link={card} index={index} />
+              <div key={card.id} className={`${index > 0 ? "mt-6" : ""}`}>
+                <LinkCard link={card} index={index} />
+              </div>
             ))}
           </div>
         </motion.div>
