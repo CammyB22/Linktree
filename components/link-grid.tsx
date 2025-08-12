@@ -17,6 +17,15 @@ const linkData = [
     order: 1, // Changed from 10 to 1
   },
   {
+    id: "rebookers-info",
+    title: "Rebooking Guide & Competitions",
+    url: "https://rebook2026.vercel.app/rebook",
+    description: "Everything you need to know about rebooking + exclusive competitions 🏆",
+    icon: "📋",
+    active: true,
+    order: 1.5, // Place it right after rebookers (order 1)
+  },
+  {
     id: "public-applications",
     title: "Public Applications",
     url: "https://campuskey.co.za/apply", // Update this URL as needed
@@ -110,7 +119,7 @@ const linkData = [
 
 export default function LinkGrid() {
   const [links, setLinks] = useState([])
-  const [rebookersCard, setRebookersCard] = useState(null)
+  const [rebookersCard, setRebookersCard] = useState([])
   const [otherCards, setOtherCards] = useState([])
   const { animationSpeed } = useMood()
 
@@ -120,11 +129,11 @@ export default function LinkGrid() {
       // In a real implementation, this would be an API call to Airtable
       const activeLinks = linkData.filter((link) => link.active).sort((a, b) => a.order - b.order)
 
-      // Separate rebookers card from other cards
-      const rebookers = activeLinks.find((link) => link.id === "rebookers")
-      const others = activeLinks.filter((link) => link.id !== "rebookers")
+      // Separate rebookers cards from other cards
+      const rebookersCards = activeLinks.filter((link) => link.id === "rebookers" || link.id === "rebookers-info")
+      const others = activeLinks.filter((link) => link.id !== "rebookers" && link.id !== "rebookers-info")
 
-      setRebookersCard(rebookers)
+      setRebookersCard(rebookersCards)
       setOtherCards(others)
       setLinks(activeLinks)
     }
@@ -172,16 +181,18 @@ export default function LinkGrid() {
         </div>
       </motion.div>
 
-      {/* Top Section - Rebookers Card */}
-      {rebookersCard && (
+      {/* Top Section - Rebookers Cards */}
+      {rebookersCard && rebookersCard.length > 0 && (
         <motion.div
-          className="w-full"
+          className="w-full space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <div className="max-w-2xl mx-auto">
-            <LinkCard link={rebookersCard} index={0} />
+          <div className="max-w-2xl mx-auto space-y-4">
+            {rebookersCard.map((card, index) => (
+              <LinkCard key={card.id} link={card} index={index} />
+            ))}
           </div>
         </motion.div>
       )}
